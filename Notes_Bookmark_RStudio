@@ -1,0 +1,74 @@
+title: "Probability scripts"
+author: "Luca Mannino"
+date: "10/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+The National Vaccine Information Center estimates that 90% of Americans have had the disease chickenpox by the time they reach adulthood. What is the probability that exactly 92 out of 100 randomly sampled American adults had chickenpox during childhood?
+
+
+
+```{r }
+pbrob <- dbinom(92, size=100,p=0.90)
+
+pbrob 
+```
+Your roommate loves to eat Chinese food for dinner. He estimates that on any given night, there’s a 30% chance he’ll choose to eat Chinese food. Although he loves Chinese food, he doesn’t like to eat it too much in a short period of time, so on most weeks he eats several different kinds of foods for dinner. Suppose you wanted to calculate the probability that, over the next 7 days, you friend eats Chinese food at least 3 times. Which of the following is the most accurate statement about calculating this probability?
+
+```{r }
+More_equal3 <- sum(dbinom(3:7,size=7,p=0.3))
+More_equal3
+```
+
+At any given time about 5.5% of women (age 15-45) are pregnant. A home pregnancy test is accurate 99% of the time if the woman taking the test is actually pregnant and 99.5% accurate if the woman is not pregnant. If the test yields a positive result, what is the posterior probability of the hypothesis that the woman is pregnant?
+
+ Bayes’ theorem: P(A|B) = P(A and B) / P(B)
+
+Let P and N denote the events “is pregnant” and “is not pregnant” respectively. Let “+” and “−” denote a positive and negative test result. We are given that P(P) = 0.055, P (+|P ) = 0.99, P (−|N ) = 0.995. Now let’s write down the desired quantity, use Bayes’ Theorem on it, and see what we have. We are asked to calculate P(P|+), which we write as P(+∣P)P(P)P(+∣P)P(P)+P(+∣N)P(N)\frac{P(+|P)P(P)}{P(+|P)P(P) + P(+|N)P(N)}P(+∣P)P(P)+P(+∣N)P(N)P(+∣P)P(P)​. We weren’t given P(N) or P(+|N), but we can calculate them using given information. Specifically P (N ) = 1 − P (P ) = 0.945 and P(+|N) = 1 − P(−|N) = 0.005. Then plug in to Bayes’ Theorem to find P(P|+) = 0.99(0.055)0.99(0.055)+0.005(0.945)\frac{0.99(0.055)}{0.99(0.055) + 0.005(0.945)}0.99(0.055)+0.005(0.945)0.99(0.055)​ = 0.92. Your answer may vary slightly due to rounding.
+
+```{r}
+Prob_False_Negative <- (94.5/100) * (0.5/100)
+True_Negative <- (94.5/100) * (99.5/100)
+False_Positive <- (5.5/100) * (1/100)
+True_Positive <- (5.5/100) * (99/100)
+(True_Positive)/(True_Positive+Prob_False_Negative)
+```
+
+One strange phenomenon that sometimes occurs at U.S. airport security gates is that an otherwise law-abiding passenger is caught with a gun in his/her carry-on bag. Usually the passenger claims he/she forgot to remove the handgun from a rarely-used bag before packing it for airline travel. It’s estimated that every day 3,000,000 gun owners fly on domestic U.S. flights. Suppose the probability a gun owner will mistakenly take a gun to the airport is 0.00001. What is the probability that tomorrow more than 35 domestic passengers will accidentally get caught with a gun at the airport? Choose the closest answer.
+
+
+
+```{r}
+
+GunProb <- sum(dbinom(0:35,size=3000000,p=0.00001))
+GunProb
+1-GunProb
+
+
+
+```
+Error above:
+This calculation would involve the sum of many binomial probabilities, so after checking conditions for the normal approximation to the binomial, (μ=np=3\mu = np = 3μ=np=3,000,000 ×\times× 0.00001 = 30 > 10 and n(1 - p) = 2,999,970 >10) and calculating σ=np(1−p)\sigma = \sqrt{np(1 - p)}σ=np(1−p)
+
+​ = 5.48, we let G denote the number of domestic passengers who get caught with a gun on a particular day. Then calculate
+
+P(G>35)=P((G−30)/5.48)P(G > 35) = P((G - 30)/5.48)P(G>35)=P((G−30)/5.48)
+
+= P((35 - 30)/5.48)
+
+≈\approx≈ P(Z > .91)
+
+≈\approx≈ 0.18
+-----------------------------Last-------------
+Question 6
+
+More than three-quarters of the nation’s colleges and universities now offer online classes, and about 23% of college graduates have taken a course online. 39% of those who have taken a course online believe that online courses provide the same educational value as one taken in person, a view shared by only 27% of those who have not taken an online course. At a coffee shop you overhear a recent college graduate discussing that she doesn’t believe that online courses provide the same educational value as one taken in person. What’s the probability that she has taken an online course before?
+
+```{r}
+Prob <- (0.61*0.23)/(0.61*0.23+0.77*0.73)
+Prob
+
+```
